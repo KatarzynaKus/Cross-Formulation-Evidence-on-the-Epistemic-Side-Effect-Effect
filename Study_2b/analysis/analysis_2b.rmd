@@ -1,0 +1,445 @@
+---
+title: "Study 2b. Within-Subject Manipulation of Wording"
+author: "Bartosz Maćkiewicz, Katarzyna Kuś, Katarzyna Paprzycka‑Hausman, Marta Zaręba"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+# Set global options for all subsequent code chunks.
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
+
+# Load required libraries for data manipulation, plotting, and statistical analysis.
+library(tidyverse) # For data wrangling and plotting (ggplot2)
+library(ggpubr)    # For creating publication-ready plots
+library(ez)        # For easy ANOVA analysis
+library(flextable) # For creating well-formatted tables
+library(stringi)   # For string manipulation
+
+# --- Data Loading and Initial Processing ---
+# Find all raw data files for this study.
+files <- Sys.glob("../data/*.csv")
+frames <- list()
+
+# Loop through each file, read it, and add the experimental condition based on the filename.
+for (file in files) {
+  frame <- read_csv(file)
+  if (stringi::stri_detect_fixed(file, "HM")) frame["condition"] <- "Harm"
+  if (stringi::stri_detect_fixed(file, "HP")) frame["condition"] <- "Help"
+  frames[[file]] <- frame
+}
+
+# Combine all data frames into one.
+study_data <- bind_rows(frames)
+
+# Create a new, unique participant ID for internal use.
+study_data$participant <- 1:nrow(study_data)
+
+# --- Data Cleaning and Recoding ---
+# Helper function to recode the 7-point Likert scale to a -3 to +3 numeric scale.
+recode_likert <- function(x) {
+  recode(x, `A1` = -3, `A2` = -2, `A3` = -1, `A4` = 0, `A5` = 1, `A6` = 2, `A7` = 3)
+}
+
+# Helper function to consolidate answers from multiple columns into one.
+get_value <- function(x) {
+  if (all(is.na(x))) return(NA)
+  x[!is.na(x)]
+}
+
+# Apply recoding functions to the raw data.
+study_data <- study_data %>%
+  mutate(
+    # Apply Likert recoding across all knowledge question columns.
+    across(matches("Kc\\[Kn..\\]"), ~ recode_likert(.x)),
+    
+    # Recode intentionality question.
+    IntChair = recode(IntChair, `A1` = "Yes", `A2` = "No"),
+    
+    # Create a nominal version for each of the three knowledge questions.
+    KAGNominal = case_when(
+      `Kc[KnAG]` < 0 ~ "Disagree",
+      `Kc[KnAG]` > 0 ~ "Agree",
+      `Kc[KnAG]` == 0 ~ "Hesitate",
+    ),
+    KSTNominal = case_when(
+      `Kc[KnST]` < 0 ~ "Disagree",
+      `Kc[KnST]` > 0 ~ "Agree",
+      `Kc[KnST]` == 0 ~ "Hesitate",
+    ),
+    KPRNominal = case_when(
+      `Kc[KnPR]` < 0 ~ "Disagree",
+      `Kc[KnPR]` > 0 ~ "Agree",
+      `Kc[KnPR]` == 0 ~ "Hesitate",
+    )
+  ) %>%
+  rowwise() %>% # Perform the next operations row by row.
+  mutate(
+    # Consolidate the justification columns for each formulation into single columns.
+    KAGJust = get_value(c_across(matches("H.KnAG...$"))),
+    KSTJust = get_value(c_across(matches("H.KnST...$"))),
+    KPRJust = get_value(c_across(matches("H.KnPR...$")))
+  )
+```
+
+```{r}
+# --- Merging with Prolific Demographic Data ---
+# Load and combine Prolific data.
+demo <- rbind(read_csv("../data/demo/prolific_export_681bd87383506faaf1864b8a.csv"),
+              read_csv("../data/demo/prolific_export_681bef33be7ace8c202df213.csv"))
+
+# Remove duplicate participants and filter to include only those in our study data.
+demo <- demo %>% 
+  distinct(`Participant id`, .keep_all = TRUE) %>%
+  filter(`Participant id` %in% study_data$PROLIFIC)
+
+# Filter the main dataset to ensure we only analyze participants with demographic data.
+study_data <- study_data %>% filter(PROLIFIC %in% demo$`Participant id`)
+```
+
+```{r}
+# --- Saving and Reloading Processed Data ---
+# This chunk saves the cleaned data and reloads it.
+
+# Save the full processed dataset.
+write_csv(study_data %>% select(
+  participant,
+  PROLIFIC,
+  condition,
+  att,
+  `Kc[KnAG]`,
+  `Kc[KnST]`,
+  `Kc[KnPR]`,
+  KAGJust,
+  KSTJust,
+  KPRJust,
+  KAGNominal,
+  KSTNominal,
+  KPRNominal,
+  IntChair
+), "study2b_clean.csv")
+# Save the demographic data for the included participants.
+write_csv(demo, "study2b_demography.csv")
+
+# Reload the clean data to ensure the following analyses are self-contained.
+study_data <- read_csv("study2b_clean.csv")
+demo <- read_csv("study2b_demography.csv")
+```
+
+### Simplified Codebook
+
+- **participant** – Anonymous numeric identifier, unique per participant.
+- **PROLIFIC** – Anonymous identifier assigned by Prolific.
+- **condition** – Vignette type manipulated between-subjects: Harm or Help.
+- **att**– Answer to the attention check question. "A5" is correct.
+- **Kc[KnAG]**, **Kc[KnST]**, **Kc[KnPR]** – Agreement with the knowledge statement for each wording, answered on a 7-point Likert scale from -3 (Strongly disagree) to +3 (Strongly agree). These are the within-subject variables.
+  - `AG`: Agentive formulation ("...knew that he would harm the environment.")
+  - `ST`: Change of state formulation ("...knew that the environment would be harmed.")
+  - `CA` (PR in raw data): Causal formulation ("...knew that implementing the new program would harm the environment.")
+- **KAGJust**, **KSTJust**, **KPRJust** – Justifications for each knowledge question.
+- **KAGNominal**, **KSTNominal**, **KPRNominal** – The three Kc variables converted into categories: Disagree, Agree, and Hesitate.
+- **IntChair** – Binary answer to the question "Did the CEO intentionally [harm/help] the environment?".
+
+# Demographics
+
+```{r}
+# Store the number of participants before attention check filtering.
+n_before <- nrow(study_data)
+
+# Remove participants who failed the attention check.
+study_data <- study_data %>% filter(att == "A5")
+# Synchronize the demographics data.
+demo <- demo %>% filter(`Participant id` %in% study_data$PROLIFIC)
+
+# Calculate demographic statistics for the final sample.
+mean_age <- mean(as.numeric(demo$Age), na.rm = TRUE)
+sd_age <- sd(as.numeric(demo$Age), na.rm = TRUE)
+tab_sex <- table(demo$Sex) 
+```
+
+A total of `r nrow(demo)` participants were included in the final analysis (`r n_before` participants were recruited before applying the attention check). The sample's average age was M = `r round(mean_age, 2)` (SD = `r round(sd_age, 2)`). The sample included `r tab_sex["Female"]` females, `r tab_sex["Male"]` males, and `r sum(tab_sex["Prefer not to say"], tab_sex["DATA_EXPIRED"], tab_sex["CONSENT_REVOKED"], na.rm = TRUE)` individuals who did not disclose their gender.
+
+
+# Knowledge Attributions
+
+This section analyzes responses to the three knowledge questions presented to each participant.
+
+To what extent do you agree with the following claims:
+
+* [CA] The CEO knew that implementing the new program would harm the environment.
+* [AG] The CEO knew that he would harm the environment.
+* [ST] The CEO knew that the environment would be harmed.
+
+
+```{r}
+# --- Data Reshaping for Analysis ---
+# Convert the data from wide format (one column per question) to long format.
+# This is necessary for repeated measures ANOVA and for plotting with ggplot2.
+
+study_data_long <- pivot_longer(study_data, matches("Kc\\[Kn..\\]"), names_to = "question", values_to = "Kc")
+# Extract the formulation type (AG, ST, PR) from the column names.
+study_data_long$form <- stringi::stri_sub(study_data_long$question, 6,7)
+# Recode 'PR' to 'CA' for consistency in labeling.
+study_data_long$form <- ifelse(study_data_long$form == "PR", "CA", study_data_long$form)
+
+# Generate the bar plot for knowledge attributions.
+ggbarplot(data = study_data_long,
+          y = "Kc",
+          x = "form",
+          fill = "condition",
+          add = "mean_se",
+          position = position_dodge(0.9),
+          ylim = c(-3, 3)
+          ) +
+  xlab("Formulation") +
+  ylab("Knowledge attributions") +
+  scico::scale_fill_scico_d(palette = "batlow") +
+  labs(fill = "Condition")
+
+# Save the plot in two different resolutions.
+ggsave("figure1_three_in_one.tiff", device = "tiff", dpi = 300,
+       compression = "lzw")
+ggsave("figure1_three_in_one_600dpi.tiff", device = "tiff", dpi = 600,
+       compression = "lzw")
+```
+
+## Descriptive Statistics
+
+```{r}
+study_data_long %>% 
+  group_by(form, condition) %>%
+  summarize(M = mean(Kc),
+            SD = sd(Kc),
+            n = n()
+            ) %>%
+  flextable() %>%
+  colformat_double(digits = 2) %>%
+  fit_to_width(11.5)
+```
+
+## ANOVA
+
+```{r message=FALSE, warning=F}
+# Perform a mixed-design ANOVA.
+# DV: Kc (knowledge attribution)
+# Between-subjects IV: condition (Harm/Help)
+# Within-subjects IV: form (ST/CA/AG)
+results <- ezANOVA(data = study_data_long,
+        dv = Kc,
+        between = .(condition) ,
+        within = .(form),
+        wid = participant
+        )$ANOVA
+  
+pander::pander(results)
+```
+
+## Pairwise paired t-tests (by Condition)
+
+### Harm Condition
+```{r}
+rstatix::pairwise_t_test(Kc ~ form, data = as.data.frame(study_data_long %>% filter(condition == "Harm")), paired = T) %>% 
+  flextable() %>%
+  colformat_double(digits = 2) %>%
+  fit_to_width(11.5)
+```
+
+### Help Condition
+```{r}
+rstatix::pairwise_t_test(Kc ~ form, data = as.data.frame(study_data_long %>% filter(condition == "Help")), paired = T) %>% 
+  flextable() %>%
+  colformat_double(digits = 2) %>%
+  fit_to_width(11.5)
+```
+
+## Pairwise paired t-tests
+
+```{r}
+rstatix::pairwise_t_test(Kc ~ form, data = as.data.frame(study_data_long), paired = T) %>% 
+  flextable() %>%
+  colformat_double(digits = 2) %>%
+  fit_to_width(11.5)
+```
+
+# Intentionality Judgments
+
+This section analyzes responses to the question: *Did the CEO intentionally [harm/help] the environment?* This question was asked once per participant.
+
+
+```{r}
+# Create a binary variable (Yes=1, No=0) for analysis.
+study_data$IntChairBin <- ifelse(study_data$IntChair == "Yes", 1, 0)
+
+# Generate the bar plot.
+ggbarplot(data = study_data,
+          y = "IntChairBin",
+          fill = "condition",
+          add = "mean_se",
+          position = position_dodge(0.9),
+          ylim = c(0, 1)
+          ) +
+  xlab("Condition") +
+  ylab("Proportion of 'Yes' Responses (Intentionality)") +
+  scico::scale_fill_scico_d(palette = "batlow") +
+  labs(fill = "Condition")
+
+ggsave("figure2_three_in_one.tiff", device = "tiff", dpi = 300,
+       compression = "lzw")
+ggsave("figure2_three_in_one_600dpi.tiff", device = "tiff", dpi = 600,
+       compression = "lzw")
+```
+
+## Descriptive Statistics
+
+```{r}
+study_data %>% 
+  group_by(condition) %>%
+  summarize(M = mean(IntChairBin),
+            SD = sd(IntChairBin),
+            n = n()
+            ) %>%
+  flextable() %>%
+  colformat_double(digits = 2) %>%
+  fit_to_width(11.5)
+```
+
+# Justification Analysis
+
+This section provides an exploratory analysis of the justifications participants gave for their knowledge attributions.
+
+
+## Justifications by Knowledge Attribution (`Agree`, `Disagree`, `Hesitate`)
+Here, we explore justification patterns separately for participants who agreed, disagreed, or hesitated about the CEO's knowledge.
+
+```{r}
+study_data_just_ag <- 
+  study_data %>% group_by(condition, KAGNominal, KAGJust) %>%
+    tally() %>%
+    mutate(`Prc` = 100 * n / sum(n))  %>%
+    select(condition, K = KAGNominal, Just = KAGJust, `Prc`, n) %>% 
+    mutate(form = "AG")
+
+study_data_just_st <- 
+  study_data %>% group_by(condition, KSTNominal, KSTJust) %>%
+    tally() %>%
+    mutate(`Prc` = 100 * n / sum(n))  %>%
+    select(condition, K = KSTNominal, Just = KSTJust, `Prc`, n) %>% 
+    mutate(form = "ST")
+
+study_data_just_pr <- 
+  study_data %>% group_by(condition, KPRNominal, KPRJust) %>%
+    tally() %>%
+    mutate(`Prc` = 100 * n / sum(n))  %>%
+    select(condition, K = KPRNominal, Just = KPRJust, `Prc`, n) %>% 
+    mutate(form = "CA")
+
+study_data_just <- rbind(study_data_just_ag, study_data_just_pr, study_data_just_st)
+```
+
+### Percentages
+
+```{r}
+ggbarplot(data = study_data_just,
+          x = "form",
+          y = "Prc",
+          fill = "Just",
+          facet.by = c("K", "condition"),
+          position = position_dodge(0.9)
+          )
+```
+
+### Counts
+
+```{r}
+ggbarplot(data = study_data_just,
+          x = "form",
+          y = "n",
+          fill = "Just",
+          facet.by = c("K", "condition"),
+          position = position_dodge(0.9)
+          )
+```
+
+```{r}
+study_data_just %>%
+  flextable() %>%
+  colformat_double(digits = 2) %>%
+  fit_to_width(11.5)
+```
+
+## Justifications (Aggregated Across Formulations)
+
+```{r}
+study_data_just_ag <- 
+  study_data %>% group_by(condition, KAGNominal, KAGJust) %>%
+    select(condition, K = KAGNominal, Just = KAGJust) %>% 
+    mutate(form = "AG")
+
+study_data_just_st <- 
+  study_data %>% group_by(condition, KSTNominal, KSTJust) %>%
+    select(condition, K = KSTNominal, Just = KSTJust) %>% 
+    mutate(form = "ST")
+
+study_data_just_pr <- 
+  study_data %>% group_by(condition, KPRNominal, KPRJust) %>%
+    select(condition, K = KPRNominal, Just = KPRJust) %>% 
+    mutate(form = "CA")
+
+study_data_just_all <- rbind(study_data_just_ag, study_data_just_pr, study_data_just_st)
+
+study_data_just <- study_data_just_all %>% group_by(condition, K, Just) %>%
+    tally() %>%
+    mutate(`Prc` = 100 * n / sum(n))  %>%
+    select(condition, K, Just, `Prc`, n)
+```
+
+### Percentages
+
+```{r}
+ggbarplot(data = study_data_just,
+          x = "Just",
+          y = "Prc",
+          fill = "K",
+          facet.by = "condition",
+          position = position_dodge(0.9)
+          )
+```
+
+### Counts
+
+```{r}
+ggbarplot(data = study_data_just,
+          x = "Just",
+          y = "n",
+          fill = "K",
+          facet.by = "condition",
+          position = position_dodge(0.9)
+          )
+```
+
+```{r}
+study_data_just %>%
+  flextable() %>%
+  colformat_double(digits = 2) %>%
+  fit_to_width(11.5)
+```
+
+```{r}
+study_data_just %>% 
+  pivot_wider(names_from = c("Just"),
+              values_from = c("Prc", "n")) %>% 
+  select(condition, K,
+         `Percent_B` = `Prc_AGB`,
+         `n_B` = `n_AGB`,
+         `Percent_A` = `Prc_AGA`,
+         `n_A` = `n_AGA`,
+         `Percent_R` = `Prc_AGR`,
+         `n_R` = `n_AGR`,
+         `Percent_O` = `Prc_-oth-`,
+         `n_O` = `n_-oth-`,
+         ) %>% 
+  flextable() %>%
+  colformat_double(digits = 2) %>%
+  fit_to_width(11.5)
+```
