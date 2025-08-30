@@ -127,6 +127,10 @@ demo <- read_csv("study2a_demography.csv")
   - `AG`: Agentive formulation ("...knew that he would harm the environment.")
 - **Kc** – Agreement with the knowledge attribution statement, answered on a 7-point Likert scale from -3 (Strongly disagree) to +3 (Strongly agree).
 - **KcJust** – Justification for the knowledge attribution response.
+  - (`AGB`) The CEO believed that [side effect would occur].
+  - (`AGA`) The CEO was aware that [side effect could occur].
+  - (`AGR`) The CEO had reasons to believe that [side effect would occur].
+  - (`-oth-`) Other (please specify).
 - **IntChair** – Binary answer to the question "Did the CEO intentionally [harm/help] the environment?".
 - **KNominal** – The `Kc` variable converted into three categories: `Disagree` (`Kc` < 0), `Agree` (`Kc` > 0), and `Hesitate` (`Kc` = 0).
 

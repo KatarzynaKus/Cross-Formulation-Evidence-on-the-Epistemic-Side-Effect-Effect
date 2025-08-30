@@ -138,6 +138,10 @@ demo <- read_csv("study2b_demography.csv")
   - `ST`: Change of state formulation ("...knew that the environment would be harmed.")
   - `CA` (PR in raw data): Causal formulation ("...knew that implementing the new program would harm the environment.")
 - **KAGJust**, **KSTJust**, **KPRJust** – Justifications for each knowledge question.
+  - (`AGB`) The CEO believed that [side effect would occur].
+  - (`AGA`) The CEO was aware that [side effect could occur].
+  - (`AGR`) The CEO had reasons to believe that [side effect would occur].
+  - (`-oth-`) Other (please specify).
 - **KAGNominal**, **KSTNominal**, **KPRNominal** – The three Kc variables converted into categories: Disagree, Agree, and Hesitate.
 - **IntChair** – Binary answer to the question "Did the CEO intentionally [harm/help] the environment?".
 
