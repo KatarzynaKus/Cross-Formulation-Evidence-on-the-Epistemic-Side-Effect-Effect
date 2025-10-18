@@ -6,13 +6,13 @@ To test this, we designed two studies with a 2 (side effect: harm vs. help) × 3
 
 The results robustly replicate the ESEE in both the between-subject and within-subject designs. The findings also reveal a significant effect of linguistic formulation on knowledge judgments, indicating that the way a knowledge question is phrased interacts with the moral valence of the side effect. This repository provides the data and analysis scripts necessary to reproduce all reported findings and allows for a direct comparison of between- and within-subject methodologies for studying the ESEE.
 
-OSF PAGE: https://osf.io/your_unique_project_id/
+OSF PAGE: https://osf.io/x8sed/
 
 ## Citation
 
 If you used the this dataset, please cite it as:
 
-> Zaręba, M., Kuś, K., Maćkiewicz, B., & Paprzycka-Hausman, K. (2025). A Replication of the Epistemic Side-Effect Effect in Polish on a Representative Sample. https://doi.org/10.17605/OSF.IO/6TVNH
+> Kuś, K., Maćkiewicz, B., Zaręba, M., & Paprzycka-Hausman, K. (2025). Cross-Formulation Evidence on the Epistemic Side-Effect Effect. https://doi.org/10.17605/OSF.IO/X8SED
 
 ## Structure of the repository
 - `Study_2a`
