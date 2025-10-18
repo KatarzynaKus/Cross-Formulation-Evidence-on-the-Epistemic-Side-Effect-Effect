@@ -53,8 +53,8 @@ participant,PROLIFIC,condition,order,att,Kc[KnAG],Kc[KnST],Kc[KnPR],KAGJust,KSTJ
 52,67d1f6824f74bd16996512c0,Harm,SPA,A5,3,3,3,AGB,AGB,AGB,NA,NA,NA,Agree,Agree,Agree,Yes
 53,67edb75b0744561f1cf6ff9d,Harm,SPA,A5,3,3,3,AGB,AGB,AGR,NA,NA,NA,Agree,Agree,Agree,Yes
 54,67f32ac5f6a4ce3d9f9c697d,Harm,SPA,A5,3,3,3,AGR,AGA,AGR,NA,NA,NA,Agree,Agree,Agree,Yes
-55,66e4ca06d1621d63704c83f9,Help,APS,A5,3,3,3,-oth-,-oth-,AGB,"Wow, the CEO may not care that it hurt head would help the environment. He knew that it would increase profits as well as healthy environment","Wow, the CEO may not care that it hurt head would help the environment. He knew that it would increase profits as well as healthy environment","Wow, the CEO may not care that it hurt head would help the environment. He knew that it would increase profits as well as healthy environment",Agree,Agree,Agree,Yes
-56,65c0ed76e2e195876cfd9b74,Help,APS,A5,1,1,1,-oth-,AGR,-oth-,The CEO was TOLD that the program would help the environment.,The CEO was TOLD that the program would help the environment.,The CEO was TOLD that the program would help the environment.,Agree,Agree,Agree,No
+55,66e4ca06d1621d63704c83f9,Help,APS,A5,3,3,3,-oth-,-oth-,AGB,"Wow, the CEO may not care that it hurt head would help the environment. He knew that it would increase profits as well as healthy environment",Does c e o new that it would help the environment,NA,Agree,Agree,Agree,Yes
+56,65c0ed76e2e195876cfd9b74,Help,APS,A5,1,1,1,-oth-,AGR,-oth-,The CEO was TOLD that the program would help the environment.,NA,The CEO was TOLD that the program would help the environment.,Agree,Agree,Agree,No
 57,678df4f0880dc11090c4839e,Help,APS,A5,1,2,2,AGA,AGR,AGA,NA,NA,NA,Agree,Agree,Agree,No
 58,67d75f1ff8a898b755874144,Help,APS,A5,-3,-3,-3,AGR,AGR,AGR,NA,NA,NA,Disagree,Disagree,Disagree,No
 59,6811ffcdbe04a28e7b3ab8a9,Help,APS,A5,-3,-1,-2,AGR,AGR,AGR,NA,NA,NA,Disagree,Disagree,Disagree,No
@@ -62,30 +62,30 @@ participant,PROLIFIC,condition,order,att,Kc[KnAG],Kc[KnST],Kc[KnPR],KAGJust,KSTJ
 61,67da8a039573449932d3f158,Help,APS,A5,-3,-3,-3,AGR,AGR,AGR,NA,NA,NA,Disagree,Disagree,Disagree,No
 62,67e7cdfb2d3c81d83ccef700,Help,APS,A5,1,2,2,AGR,AGR,AGR,NA,NA,NA,Agree,Agree,Agree,No
 63,5be8dab5d153f500019ab320,Help,APS,A5,1,1,1,AGR,AGR,AGR,NA,NA,NA,Agree,Agree,Agree,No
-64,58d0632c2fc72000011f8c57,Help,ASP,A5,-1,1,2,-oth-,AGR,AGR,"The CEO did not ask the employee about how the program would help the environment, or if it could be proven that it actually would have this outcome, so he could not have had full knowledge of this.","The CEO did not ask the employee about how the program would help the environment, or if it could be proven that it actually would have this outcome, so he could not have had full knowledge of this.","The CEO did not ask the employee about how the program would help the environment, or if it could be proven that it actually would have this outcome, so he could not have had full knowledge of this.",Disagree,Agree,Agree,No
+64,58d0632c2fc72000011f8c57,Help,ASP,A5,-1,1,2,-oth-,AGR,AGR,"The CEO did not ask the employee about how the program would help the environment, or if it could be proven that it actually would have this outcome, so he could not have had full knowledge of this.",NA,NA,Disagree,Agree,Agree,No
 65,66ca41de318c12cd9f59b13a,Help,ASP,A5,3,3,3,AGB,AGR,AGR,NA,NA,NA,Agree,Agree,Agree,Yes
 66,67e976a6e06398ceb7d16dd4,Help,ASP,A5,-1,-1,2,AGB,AGB,AGA,NA,NA,NA,Disagree,Disagree,Agree,No
-67,67f2f986d7ff7b3e48ea927d,Help,ASP,A5,1,1,2,-oth-,AGR,AGR,"Did not really care about the environment, just cared about making profits.","Did not really care about the environment, just cared about making profits.","Did not really care about the environment, just cared about making profits.",Agree,Agree,Agree,No
+67,67f2f986d7ff7b3e48ea927d,Help,ASP,A5,1,1,2,-oth-,AGR,AGR,"Did not really care about the environment, just cared about making profits.",NA,NA,Agree,Agree,Agree,No
 68,63a2844c9d6acbec7228a420,Help,ASP,A5,2,2,2,AGA,AGA,AGA,NA,NA,NA,Agree,Agree,Agree,No
 69,67eaa8044e370fe61f1764a0,Help,ASP,A5,-2,-2,-2,AGR,AGA,AGR,NA,NA,NA,Disagree,Disagree,Disagree,No
 70,67e454623e6de5fb43257f74,Help,ASP,A5,2,3,2,AGR,AGR,AGB,NA,NA,NA,Agree,Agree,Agree,Yes
 71,66abf0c472f051b5e40cfbfd,Help,ASP,A5,3,3,3,AGA,AGA,AGA,NA,NA,NA,Agree,Agree,Agree,No
 72,67d6ffe7dad4354b208e186d,Help,ASP,A5,-3,-1,0,AGR,AGB,AGA,NA,NA,NA,Disagree,Disagree,Hesitate,No
 73,67e9abb9af847e68878b7c45,Help,PAS,A5,2,2,2,AGA,AGA,AGA,NA,NA,NA,Agree,Agree,Agree,No
-74,66b78f42263a85bcf10a18b6,Help,PAS,A5,1,3,3,-oth-,AGA,AGA,"The CEO was aware that the program would help the environment, thus by implementing the program IT helped the environment. I would not say HE could help the environment but rather it was a direct result of his decision to proceed with the program.","The CEO was aware that the program would help the environment, thus by implementing the program IT helped the environment. I would not say HE could help the environment but rather it was a direct result of his decision to proceed with the program.","The CEO was aware that the program would help the environment, thus by implementing the program IT helped the environment. I would not say HE could help the environment but rather it was a direct result of his decision to proceed with the program.",Agree,Agree,Agree,No
+74,66b78f42263a85bcf10a18b6,Help,PAS,A5,1,3,3,-oth-,AGA,AGA,"The CEO was aware that the program would help the environment, thus by implementing the program IT helped the environment. I would not say HE could help the environment but rather it was a direct result of his decision to proceed with the program.",NA,NA,Agree,Agree,Agree,No
 75,5f04d20be5bc397b4e93df7a,Help,PAS,A5,3,3,3,AGA,AGR,AGA,NA,NA,NA,Agree,Agree,Agree,No
 76,67b9d2f7a49052c6e25c6a7f,Help,PAS,A5,3,3,3,AGA,AGA,AGB,NA,NA,NA,Agree,Agree,Agree,No
 77,67f2deca27b8cc9a90484c43,Help,PAS,A5,3,2,2,AGA,AGA,AGA,NA,NA,NA,Agree,Agree,Agree,No
 78,5ceef5a66441f4000139711f,Help,PAS,A5,3,3,3,AGA,AGA,AGR,NA,NA,NA,Agree,Agree,Agree,No
-79,67e184908b8cd53c87ac90a2,Help,PAS,A5,3,3,3,-oth-,AGA,-oth-,"He was aware as they were making profit, the program would also benefit the environment.","He was aware as they were making profit, the program would also benefit the environment.","He was aware as they were making profit, the program would also benefit the environment.",Agree,Agree,Agree,No
+79,67e184908b8cd53c87ac90a2,Help,PAS,A5,3,3,3,-oth-,AGA,-oth-,"He was aware as they were making profit, the program would also benefit the environment.",NA,He knew but he didn't just care. All he wanted was profit.,Agree,Agree,Agree,No
 80,55cf5cc434e9060005e56c39,Help,PAS,A5,3,3,3,AGR,AGR,AGR,NA,NA,NA,Agree,Agree,Agree,No
 81,675330fb23080b9ae3ec8239,Help,PAS,A5,-1,-1,-1,AGA,AGB,AGA,NA,NA,NA,Disagree,Disagree,Disagree,No
 82,62916bb383e38e21d42cef2b,Help,PSA,A5,3,3,3,AGA,AGA,AGA,NA,NA,NA,Agree,Agree,Agree,No
-83,5b57894babd7a000014845b8,Help,PSA,A5,2,2,2,AGA,AGA,-oth-,NA,NA,NA,Agree,Agree,Agree,No
+83,5b57894babd7a000014845b8,Help,PSA,A5,2,2,2,AGA,AGA,-oth-,NA,NA,The CEO knew the program would help the environment because he was told that it would by the vice-president.,Agree,Agree,Agree,No
 84,5efec82cf597a73e75e3fbe0,Help,PSA,A5,-3,-3,-3,AGA,AGA,AGA,NA,NA,NA,Disagree,Disagree,Disagree,No
 85,5efd22056ec55516587f32a6,Help,PSA,A5,-3,-3,-2,AGB,AGB,AGA,NA,NA,NA,Disagree,Disagree,Disagree,No
 86,676d746ed2391d1de669298a,Help,PSA,A5,3,3,3,AGB,AGB,AGA,NA,NA,NA,Agree,Agree,Agree,No
-87,6508adaced024f8da237ff03,Help,PSA,A5,3,3,3,-oth-,-oth-,AGA,The CEO was told the environment would be helped.,The CEO was told the environment would be helped.,The CEO was told the environment would be helped.,Agree,Agree,Agree,No
+87,6508adaced024f8da237ff03,Help,PSA,A5,3,3,3,-oth-,-oth-,AGA,The CEO was told the environment would be helped.,The CEO was told the environment would be helped.,NA,Agree,Agree,Agree,No
 88,67363452674f3db8059e7888,Help,PSA,A5,2,2,2,AGA,AGA,AGA,NA,NA,NA,Agree,Agree,Agree,No
 89,66f4c82536b5c8271f53564c,Help,PSA,A5,3,3,3,AGA,AGA,AGA,NA,NA,NA,Agree,Agree,Agree,No
 90,643db5baa695a720a1bbdb4f,Help,PSA,A5,3,3,3,AGA,AGA,AGA,NA,NA,NA,Agree,Agree,Agree,No

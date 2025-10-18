@@ -82,8 +82,8 @@ study_data <- study_data %>%
     KSTJust = get_value(c_across(matches("H.KnST...$"))),
     KPRJust = get_value(c_across(matches("H.KnPR...$"))),
     KAGJustOt = get_value(c_across(matches("H.KnAG...Ot$"))),
-    KSTJustOt = get_value(c_across(matches("H.KnAG...Ot$"))),
-    KPRJustOt = get_value(c_across(matches("H.KnAG...Ot$")))
+    KSTJustOt = get_value(c_across(matches("H.KnST...Ot$"))),
+    KPRJustOt = get_value(c_across(matches("H.KnPR...Ot$")))
   )
 ```
 
